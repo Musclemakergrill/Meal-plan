@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>الوجبات الاسبوعية</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختيار الوجبات الأسبوعية</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+            margin: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        label, select, input {
+            margin: 10px 0;
+        }
+        .meal-select, .carb-select {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .snack-section {
+            margin-top: 10px;
+        }
+        .note-input {
+            width: 80%;
+            margin: 5px auto;
+            display: block;
+        }
+        .whatsapp-button {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+    </style>
+
+
+    <div class="container">
+        <h1>اختيار الوجبات الأسبوعية</h1>
+
+        <!-- اسم العميل -->
+        <label for="customerName">اسم العميل:</label>
+        <input type="text" id="customerName" name="customerName">
+
+        <!-- نوع الاشتراك -->
+        <label for="subscriptionType">نوع الاشتراك:</label>
+        <select id="subscriptionType" name="subscriptionType" onchange="updateMealOptions()">
+            <option value="" disabled="" selected="">اختر...</option>
+            <option value="1">وجبة</option>
+            <option value="2">وجبتين</option>
+            <option value="3">ثلاث وجبات</option>
+            <option value="4">أربع وجبات</option>
+            <option value="5">خمس وجبات</option>
+        </select>
+
+        <!-- اختيار إذا كان الاشتراك مع سناك -->
+        <label for="snackIncluded">هل يتضمن سناك؟</label>
+        <select id="snackIncluded" name="snackIncluded" onchange="toggleSnackSelection()">
+            <option value="" disabled="" selected="">اختر...</option>
+            <option value="yes">نعم</option>
+            <option value="no">لا</option>
+        </select>
+
+        <!-- اختيار البروتين -->
+        <label for="proteinChoice">اختيار البروتين (جرامات):</label>
+        <select id="proteinChoice" name="proteinChoice">
+            <option value="100">100</option>
+            <option value="150">150</option>
+            <option value="200">200</option>
+        </select>
+
+        <!-- حقل جرامات الكارب -->
+        <label for="carbsChoice">جرامات الكارب:</label>
+        <input type="text" id="carbsChoice" name="carbsChoice" placeholder="أدخل عدد الجرامات">
+
+        <!-- نوع الاستلام -->
+        <label for="deliveryType">نوع الاستلام:</label>
+        <select id="deliveryType" name="deliveryType">
+            <option value="" disabled="" selected="">اختر...</option>
+            <option value="pickup">الاستلام من الفرع</option>
+            <option value="delivery">توصيل</option>
+        </select>
+
+        <!-- جدول اختيار الوجبات لكل يوم -->
+        <table>
+            <thead>
+                <tr>
+                    <th>اليوم</th>
+                    <th>اختيار الوجبات</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>السبت</td>
+                    <td id="mealSaturday">
+                        <div id="mealOptionsSaturday"></div>
+                        <!-- قسم السناك -->
+                        <div class="snack-section" id="snackSectionSaturday" style="display:none;">
+                            <label for="snackSaturday">اختيار السناك:</label>
+                            <select id="snackSaturday" name="snackSaturday">
+                              <option value="Choose Snack">اختر سناك</option>
+                              <option value="Broccoli Salad">سلطة بروكلي</option>
+                                <option value="Tabbouleh">تبولة</option>
+                                <option value="Chocolate Muffin">شوكليت مافن</option>
+                                <option value="Cheesecake Strawberry">تشيز كيك فراولة</option>
+                                <option value="Protein Ball VIP">كرات بروتين VIP</option>
+                                <option value="Cheesecake Mango VIP">تشيز كيك مانجو VIP</option>
+                                <option value="Cheesecake Roseberry VIP">تشيز كيك بلو بيري VIP</option>
+                                <option value="Cheesecake Roseberry VIP">تشيز كيك روز بيري VIP</option>
+                                <option value="Protein Waffle VIP">وافل بروتين VIP</option>
+
+                           
+                              
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>الأحد</td>
+                    <td id="mealSunday">
+                        <div id="mealOptionsSunday"></div>
+                        <!-- قسم السناك -->
+                        <div class="snack-section" id="snackSectionSunday" style="display:none;">
+                            <label for="snackSunday">اختيار السناك:</label>
+                            <select id="snackSunday" name="snackSunday">
+                               <option value="Choose Snack">اختر سناك</option>                             
+                                <option value="Roasted Butternut Salad">سلطة القرع المشوي</option>
+                                <option value="Strawberry Salad">سلطة فراولة</option>
+                                <option value="Rocca Salad">سلطة جرجير</option>
+                                <option value="Blueberry Vanilla Muffin">فانيلا مافن</option>
+                                <option value="Protein Oats Cookies">كوكيز الشوفان</option>
+                                <option value="Protein Ball VIP">كرات بروتين VIP</option>
+                                <option value="Cheesecake Mango VIP">تشيز كيك مانجو VIP</option>
+                                <option value="Cheesecake Roseberry VIP">تشيز كيك بلو بيري VIP</option>
+                                <option value="Cheesecake Roseberry VIP">تشيز كيك روز بيري VIP</option>
+                                <option value="Protein Waffle VIP">وافل بروتين VIP</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>الاثنين</td>
+                    <td id="mealMonday">
+                        <div id="mealOptionsMonday"></div>
+                        <!-- قسم السناك -->
+                        <div class="snack-section" id="snackSectionMonday" style="display:none;">
+                            <label for="snackMonday">اختيار السناك:</label>
+                            <select id="snackMonday" name="snackMonday">
+                              <option value="Choose Snack">اختر سناك</option>                              
+                              <option value="Greek Salad">سلطة يونانية</option>
+                                <option value="Watermelon Salad">سلطة البطيخ</option>
+                                <option value="Fruit Custard">كاسترد فواكة</option>
+                                <option value="Mango Muffin">مانجو مافن</option>
+                                <option value="Protein Ball VIP">كرات بروتين VIP</option>
+                                <option value="Cheesecake Mango VIP">تشيز كيك مانجو VIP</option>
+                                <option value="Cheesecake Roseberry VIP">تشيز كيك بلو بيري VIP</option>
+                                <option value="Cheesecake Roseberry VIP">تشيز كيك روز بيري VIP</option>
+                                <option value="Protein Waffle VIP">وافل بروتين VIP</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>الثلاثاء</td>
+                    <td id="mealTuesday">
+                        <div id="mealOptionsTuesday"></div>
+                        <!-- قسم السناك -->
+                        <div class="snack-section" id="snackSectionTuesday" style="display:none;">
+                            <label for="snackTuesday">اختيار السناك:</label>
+                            <select id="snackTuesday" name="snackTuesday">
+                              <option value="Choose Snack">اختر سناك</option> 
+                              <option value="Garden Veg Salad">سلطة البقوليات</option>
+                                <option value="Broccoli Salad">سلطة بروكلي</option>
+                                <option value="Tabbouleh">تبولة</option>
+                                <option value="Blueberry Vanilla Muffin">فانيلا مافن</option>
+                                <option value="Cheesecake Strawberry">تشيز كيك فراولة</option>
+                                <option value="Protein Ball VIP">كرات بروتين VIP</option>
+                                <option value="Cheesecake Mango VIP">تشيز كيك مانجو VIP</option>
+                                <option value="Cheesecake Roseberry VIP">تشيز كيك بلو بيري VIP</option>
+                                <option value="Cheesecake Roseberry VIP">تشيز كيك روز بيري VIP</option>
+                                <option value="Protein Waffle VIP">وافل بروتين VIP</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>الأربعاء</td>
+                    <td id="mealWednesday">
+                        <div id="mealOptionsWednesday"></div>
+                        <!-- قسم السناك -->
+                        <div class="snack-section" id="snackSectionWednesday" style="display:none;">
+                            <label for="snackWednesday">اختيار السناك:</label>
+                            <select id="snackWednesday" name="snackWednesday">
+                              <option value="Choose Snack">اختر سناك</option>                              
+                                <option value="Strawberry Salad">سلطة فراولة</option>
+                                <option value="Greek Salad">سلطة يونانية</option>
+                                <option value="Rocca Salad">سلطة جرجير</option>
+                                <option value="Fruit Custard">كاسترد فواكة</option>
+                                <option value="Chocolate Muffin">شوكليت مافن</option>
+                                <option value="Protein Ball VIP">كرات بروتين VIP</option>
+                                <option value="Cheesecake Mango VIP">تشيز كيك مانجو VIP</option>
+                                <option value="Cheesecake Roseberry VIP">تشيز كيك بلو بيري VIP</option>
+                                <option value="Cheesecake Roseberry VIP">تشيز كيك روز بيري VIP</option>
+                                <option value="Protein Waffle VIP">وافل بروتين VIP</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>الخميس</td>
+                    <td id="mealThursday">
+                        <div id="mealOptionsThursday"></div>
+                        <!-- قسم السناك -->
+                        <div class="snack-section" id="snackSectionThursday" style="display:none;">
+                            <label for="snackThursday">اختيار السناك:</label>
+                            <select id="snackThursday" name="snackThursday">
+                              <option value="Choose Snack">اختر سناك</option> 
+                              <option value="Garden Veg Salad">سلطة البقوليات</option>
+                                <option value="Watermelon Salad With Feta">سلطة البطيخ مع الفيتا</option>
+                                <option value="Roasted Butternut Salad">سلطة القرع المشوي</option>
+                                <option value="Protein Oats Cookies">كوكيز الشوفان</option>
+                                <option value="Mango Muffin">مانجو مافن</option>
+                                <option value="Protein Ball VIP">كرات بروتين VIP</option>
+                                <option value="Cheesecake Mango VIP">تشيز كيك مانجو VIP</option>
+                                <option value="Cheesecake Roseberry VIP">تشيز كيك بلو بيري VIP</option>
+                                <option value="Cheesecake Roseberry VIP">تشيز كيك روز بيري VIP</option>
+                                <option value="Protein Waffle VIP">وافل بروتين VIP</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>            </tbody>
+        </table>
+
+        <button class="whatsapp-button" onclick="sendToWhatsApp()">إرسال إلى واتساب</button>
+    </div>
+
+    <script>
+        function toggleSnackSelection() {
+            var snackIncluded = document.getElementById("snackIncluded").value;
+            var snackSections = document.querySelectorAll(".snack-section");
+
+            if (snackIncluded === "yes") {
+                snackSections.forEach(function(section) {
+                    section.style.display = "block";
+                });
+            } else {
+                snackSections.forEach(function(section) {
+                    section.style.display = "none";
+                });
+            }
+        }
+
+        function updateMealOptions() {
+            var subscriptionType = document.getElementById("subscriptionType").value;
+            var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
+
+            days.forEach(function(day) {
+                var mealOptions = document.getElementById("mealOptions" + day);
+                mealOptions.innerHTML = ''; // تفريغ المحتوى الحالي
+
+                for (var i = 1; i <= subscriptionType; i++) {
+                    var mealSelect = document.createElement('select');
+                    mealSelect.className = "meal-select";
+                    mealSelect.name = "meal" + day + i;
+                    mealSelect.innerHTML = `
+                        <option value="0">اختر الوجبة</option>
+                        <option value="Flex Fuel(Bowl) ">فليكس فيول صحن</option>
+                        <option value="Flex Fuel(Pizza) ">فليكس فيول بيتزا</option>
+                            <option value="The Western(Bowl) ">ذا ويسترن صحن</option>
+                            <option value="The Western(Wrap) ">ذا ويسترن راب</option>
+                            <option value="The Philly(Bowl) "> ذا فيلي صحن</option>
+                            <option value="The Philly(Wrap) ">ذا فيلي راب</option>
+                            <option value="The Garden(Bowl) ">ذا جاردن صحن</option>
+                            <option value="The Garden(Wrap) ">ذا جاردن راب</option>
+                            <option value="Hallomi Sandwich">حلوم ساندوتش</option>
+                            <option value="Hallomi Zater">حلوم زعتر</option>
+                            <option value="Hallomi Wrap">حلوم راب</option>
+                            <option value="Club Sandwich">كلوب ساندوتش</option>
+                            <option value="Egg Shkshoka">بيض شكشوكة</option>
+                            <option value="Egg Spinach">بيض سبانخ</option>
+                            <option value="Oats">شوفان</option>
+                            <option value="Protein Oats">شوفان ع بروتين</option>
+                            <option value="PP&G Oats">بي جي جي شوفان</option>
+                            <option value="Lean & Mean Cheese Burger">لين اند مين تشيز برجر</option>
+                            <option value="Asian Sesame Ginger">سلطة سمسم الزنجبيل</option>
+                            <option value="Chicken Cesar Salad">سلطة دجاج سيزر</option>
+                            <option value="Quinoa Salad">سلطة كينوا</option>
+                            <option value="Italiano Salad">سلطة ايطاليانو</option>
+                            <option value="Mardi Gars Salad">سلطة ماردي غراس</option>
+                            <option value="Shrimp Biryani">برياني روبيان</option>
+                            <option value="Beef Biryani">برياني لحم</option>
+                            <option value="Crispy Chicken Pasta">الدجاج المقرمش مع مكرونة</option>
+                            <option value="Chicken Biryani">برياني دجاج</option>
+                            <option value="Beef Kabab (Bowl)">كباب لحم صحن</option>
+                            <option value="Godfather">جود فاذر</option>
+                            <option value="Grilled Salmon Entree">جريلد سالمون انتري</option>
+                            <option value="Grilled Chicken Etree">جريلد تشيكن انتري</option>
+                            <option value="Crispy Chicken">الدجاج المقرمش</option>
+                            <option value="Salmon White Sauce">سالمون الصلصة البيضاء</option>
+                            <option value="Chicken Kabab (Bowl)">كباب دجاج صحن</option>
+                            <option value="Teriyaki Stir Fry">ترياكي ستير فراي</option>
+                            <option value="Chicken Lemon">دجاج بصلصة الليمون</option>
+                            <option value="Santa Ana">سانتا انا</option>
+                            <option value="Arizona">أريزونا</option>
+                            <option value="El-Mexican">المكسيكان</option>
+                            <option value="Chicken Butter">دجاج بصلصة الزبدة</option>
+                            <option value="Chicken Kabsah">كبسة دجاج (يوم الاحد فقط)</option>
+                            <option value="Boneless BBQ">بايتس باريكيو</option>
+                            <option value="Boneless Buffalo">بايتس بافلو</option>
+                            <option value="Boneless Teriyaki">بايتس ترياكي</option>
+                            <option value="Premiun">برجر بريميم</option>
+                            <option value="Vegetable Burger">برجر خضراوات</option>
+                            <option value="Jalapeno Burger">برجر هالبينو</option>
+                            <option value="Mini Burger">برجر ميني</option>
+                            <option value="Mushroom Supreme">برجر مشروم سوبريم</option>
+                            <option value="California Club">برجر كاليفورنا كلوب</option>
+                            <option value="Chicken Burger">برجر دجاج</option>
+                            <option value="Recovery">برجر ريكفري</option>
+                            <option value="Quinoa Wrap">الكينوا راب</option>
+                            <option value="MMG Wrap">الراب الخاص بنا</option>
+                            <option value="Xxl Wrap">اكس اكس ال راب</option>
+                            <option value="Ye Ha Wrap">يي ها راب</option>
+                            <option value="Beef Kabab Wrap">كباب لحم راب</option>
+                            <option value="Chicken Kabab Wrap">كباب دجاج راب</option>
+                            <option value="Vege Wrap">في جي راب</option>
+                            <option value="Chicken Cesar Wrap">تشيكن سيزر راب</option>
+                            <option value="Santa Fe Wrap">سانتا في راب</option>
+                            <option value="Rocky Wrap">روكي راب</option>
+                            <option value="Tex Mex Fajita">تكس مكس فاهيتا راب</option>
+                            <option value="Chicken BBQ Wrap">تشيكن باربكيو راب</option>
+                            <option value="Griled Chicken">دجاج</option>
+                            <option value="Beef Steak">ستيك لحم</option>
+                            <option value="Grilled Shrimp">روبيان</option>
+                            <option value="Spagetti Bolo">سباجيتي بولونيز</option>
+                            <option value="Pesto Pasta">بيستو دجاج</option>
+                            <option value="Pesto Spagetti">بيستو سباجيتي</option>
+                            <option value="Mediterranean Pasta">مكرونة البحر المتوسط</option>
+                            <option value="Cajun Chicken Pene">كاجون بيني تشيكن</option>
+                            <option value="Penne&Chicken">بيني اند تشيكن</option>
+                            <option value="Chicken White Pasta">مكرونة الدجاج بالصوص الابيض</option>
+                            <option value="Lasagna">لازانيا (يوم الخميس فقط)</option>
+                            <option value="MMG Pizza">بيتزا مصل ميكر</option>
+                            <option value="Pepperoni">بيتزا بيبروني</option>
+                            <option value="Vege Pizza">بيتزا خضار</option>
+                            <option value="Flex Fuel Pizza">بيتزا فليكس فيول</option>
+                            <option value="Chicken BBQ Pizza">بيتزا دجاج باربكيو</option>
+                            <option value="Buffalo Pizza">بيتزا بافلو</option>
+                            <option value="Calssic White">بيتزا كلاسيك وايت</option>
+                            <option value="The Works">بيتزا ذا ووركس</option>
+                    `;
+
+                    var carbSelect = document.createElement('select');
+                    carbSelect.className = "carb-select";
+                    carbSelect.name = "carb" + day + i;
+                    carbSelect.innerHTML = `
+                        <option value="0">اختر الكارب</option>
+                        <option value="Rice">ارز</option>
+                        <option value="Brown Rice">ارز بني</option>
+                        <option value="Wedges Potato">بطاطا ودجز</option>
+                        <option value="Sweet Potato">بطاطا حلوة</option>
+                        <option value="Mash Potato">بطاطا مهروسة</option>
+                        <option value="Lean-Loadd Potato">بطاطا مشوية بالفرن</option>
+                        <option value="Vege">خضار</option>
+                        <option value="Broccoli">بروكلي</option>
+                        <option value="Edamame">ايدي مامي</option>
+                        <option value="Spinach">سبانخ</option>
+
+
+                    `;
+
+                    var noteInput = document.createElement('input');
+                    noteInput.type = 'text';
+                    noteInput.className = "note-input";
+                    noteInput.placeholder = " ملاحظات الوجبة" + (i > 1 ? " " + i : "");
+                    noteInput.name = "note" + day + i;
+
+                    mealOptions.appendChild(mealSelect);
+                    mealOptions.appendChild(carbSelect);
+                    mealOptions.appendChild(noteInput);
+                }
+            });
+        }
+
+        function sendToWhatsApp() {
+            // جمع البيانات الأساسية
+            var customerName = document.getElementById("customerName").value;
+            var subscriptionType = document.getElementById("subscriptionType").value;
+            var snackIncluded = document.getElementById("snackIncluded").value;
+            var proteinChoice = document.getElementById("proteinChoice").value;
+            var carbsChoice = document.getElementById("carbsChoice").value;
+            var deliveryType = document.getElementById("deliveryType").value;
+
+            var message = `اسم العميل: ${customerName}\n`;
+            message += `نوع الاشتراك: ${subscriptionType} وجبات\n`;
+            message += `هل يتضمن سناك: ${snackIncluded === "yes" ? "نعم" : "لا"}\n`;
+            message += `اختيار البروتين: ${proteinChoice} جرام\n`;
+            message += `جرامات الكارب: ${carbsChoice}\n`;
+            message += `نوع الاستلام: ${deliveryType === "pickup" ? "الاستلام من الفرع" : "توصيل"}\n\n`;
+
+            // جمع بيانات الوجبات لكل يوم بناءً على نوع الاشتراك
+            var days = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
+
+            days.forEach(function(day) {
+                message += `${day}:\n`;
+
+                for (var i = 1; i <= subscriptionType; i++) {
+                    var mealSelect = document.querySelector(`select[name="meal${day}${i}"]`);
+                    var carbSelect = document.querySelector(`select[name="carb${day}${i}"]`);
+                    var noteInput = document.querySelector(`input[name="note${day}${i}"]`);
+
+                    if (mealSelect && carbSelect && noteInput) {
+                        var meal = mealSelect.value;
+                        var carb = carbSelect.value;
+                        var note = noteInput.value;
+                        message += `وجبة ${i}: ${meal}, كارب: ${carb}, ملاحظة: ${note}\n`;
+                    }
+                }
+
+                // إضافة السناك إذا كان متضمنًا
+                if (snackIncluded === "yes") {
+                    var snack = document.querySelector(`#snack${day}`);
+                    if (snack) {
+                        message += `سناك: ${snack.value}\n`;
+                    }
+                }
+
+                message += `\n`; // مسافة بين الأيام
+            });
+
+            // إرسال الرسالة عبر واتساب
+            var whatsappNumber = '966562914366'; // تأكد من وجود رمز البلد
+            var whatsappURL = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+        }
+    </script>
+<!-- partial -->
+  
+</body>
+</html>
